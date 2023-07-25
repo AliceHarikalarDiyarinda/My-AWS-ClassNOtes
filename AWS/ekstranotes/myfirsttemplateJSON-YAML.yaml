@@ -1,0 +1,33 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  This template launches an EC2 instance with a sec grp that enables SSH and http.
+
+Resources:
+  Webserver:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0b5eea76982371e91
+      InstanceType: t2.micro
+      KeyName: ozi # please use your own key without pem.
+      SecurityGroups:
+        - !Ref WebserverSecGrp
+      Tags:
+        - Key: Name
+          Value: CFN-Instance
+        - Key: Environment
+          Value: Dev
+
+  WebserverSecGrp:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: enables SSH # Required
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
